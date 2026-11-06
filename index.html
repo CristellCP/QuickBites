@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#851923">
+  <meta name="description" content="Quick Bites: siumai, dumplings, bebidas y salsas para tus antojos.">
+  <title>Quick Bites | Antojos que no esperan</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+  <div class="top-ribbon">
+    <span>🥟</span>
+    ANTOJOS QUE NO ESPERAN
+    <span>🥢</span>
+  </div>
+
+  <header class="site-header">
+    <a class="brand" href="#inicio" aria-label="Quick Bites, inicio">
+      <img src="images/quickbites.png" alt="Logo de Quick Bites">
+      <span>QUICK <b>BITES</b></span>
+    </a>
+
+    <button
+      class="menu-toggle"
+      id="menuToggle"
+      aria-label="Abrir menú"
+      aria-expanded="false"
+      aria-controls="mainNav">
+      ☰
+    </button>
+
+    <nav class="main-nav" id="mainNav">
+      <a href="#inicio">Inicio</a>
+      <a href="#menu">Nuestro menú</a>
+      <a href="#nosotros">Nuestra esencia</a>
+      <a class="nav-contact"
+         href="https://wa.me/50763513603"
+         target="_blank"
+         rel="noopener">
+        Contáctanos ↗
+      </a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- PORTADA -->
+    <section class="hero" id="inicio">
+      <div class="hero-copy">
+        <span class="eyebrow">
+          <span class="eyebrow-line"></span>
+          STREET FOOD · DIM SUM
+        </span>
+
+        <h1>
+          ANTOJOS QUE
+          <span>NO ESPERAN.</span>
+        </h1>
+
+        <p>
+          Pequeños bocados, grandes antojos.
+          Encuentra tu próximo favorito en Quick Bites.
+        </p>
+
+        <div class="hero-actions">
+          <a class="primary-button" href="#menu">
+            Ver nuestro menú <span>↓</span>
+          </a>
+
+          <span class="hero-note">HECHO PARA DISFRUTAR ♥</span>
+        </div>
+
+        <div class="hero-stamp">
+          <span>QUICK BITES</span>
+          <b>好吃!</b>
+          <small>MUCHO SABOR</small>
+        </div>
+      </div>
+
+      <div class="hero-art">
+        <div class="hero-image-frame">
+          <img src="images/products/FQ.png" alt="Siumai de Quick Bites">
+        </div>
+
+        <div class="hero-tag">
+          <span>🥢</span>
+          <div>
+            <b>¿Ya tienes hambre?</b>
+            <small>Tu antojo empieza aquí.</small>
+          </div>
+        </div>
+
+        <span class="hero-decoration decoration-one">点心</span>
+        <span class="hero-decoration decoration-two">✳</span>
+      </div>
+    </section>
+
+    <!-- FRAJA DECORATIVA -->
+    <div class="marquee">
+      <div class="marquee-track">
+        <span>✳ QUICK BITES ✳ DIM SUM ✳ BUEN SABOR ✳</span>
+        <span>✳ QUICK BITES ✳ DIM SUM ✳ BUEN SABOR ✳</span>
+        <span>✳ QUICK BITES ✳ DIM SUM ✳ BUEN SABOR ✳</span>
+        <span>✳ QUICK BITES ✳ DIM SUM ✳ BUEN SABOR ✳</span>
+        <span>✳ QUICK BITES ✳ DIM SUM ✳ BUEN SABOR ✳</span>
+      </div>
+    </div>
+
+    <!-- MENÚ -->
+    <section class="menu-section section-wrap" id="menu">
+
+      <div class="section-heading">
+        <span class="eyebrow">ELIGE TU ANTOJO</span>
+        <h2>Esto se va a poner <em>bueno.</em></h2>
+        <p>
+          Explora nuestras opciones y encuentra algo que te provoque.
+        </p>
+      </div>
+
+      <div class="filter-bar" id="filterBar" aria-label="Filtrar productos">
+        <button class="filter-button active" data-filter="todos">Todo</button>
+        <button class="filter-button" data-filter="siumai">Siumai</button>
+        <button class="filter-button" data-filter="Dumpling">Dumplings</button>
+        <button class="filter-button" data-filter="bebidas">Bebidas</button>
+        <button class="filter-button" data-filter="salsas">Salsas</button>
+      </div>
+
+      <div class="product-grid" id="productGrid" aria-live="polite"></div>
+
+      <p class="menu-note">
+        Los precios y productos se muestran según nuestro menú.
+        Consulta disponibilidad al contactarnos.
+      </p>
+    </section>
+
+    <!-- IDENTIDAD DE MARCA -->
+    <section class="story-section" id="nosotros">
+      <div class="story-symbol">福</div>
+
+      <div class="story-copy">
+        <span class="eyebrow">UN TOQUE DE TRADICIÓN</span>
+
+        <h2>
+          Un poquito de China,
+          <em>cerca de ti.</em>
+        </h2>
+
+        <p>
+          En Quick Bites celebramos el encanto del dim sum con
+          bocados llenos de sabor. Queremos acompañar tus pausas,
+          tus reuniones y esos antojos que aparecen sin avisar.
+        </p>
+
+        <a class="story-link" href="#menu">
+          Descubre el menú <span>↗</span>
+        </a>
+      </div>
+
+      <div class="story-decoration" aria-hidden="true">
+        <span>好吃</span>
+        <b>QUICK<br>BITES</b>
+        <small>MUCHO SABOR EN CADA BOCADO</small>
+      </div>
+    </section>
+
+    <!-- CONTACTO -->
+    <section class="contact-section section-wrap" id="contacto">
+      <div class="contact-copy">
+        <span class="eyebrow">¿SE TE ANTOJÓ?</span>
+        <h2>Hablemos de <em>comida.</em></h2>
+        <p>
+          Escríbenos para consultar disponibilidad
+          y realizar tus pedidos.
+        </p>
+      </div>
+
+      <a class="primary-button"
+         href="https://wa.me/50763513603"
+         target="_blank"
+         rel="noopener">
+        Pedir por WhatsApp <span>↗</span>
+      </a>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <a class="footer-brand" href="#inicio">
+      QUICK <b>BITES</b>
+    </a>
+
+    <div class="footer-details">
+      <a href="https://wa.me/50763513603"
+         target="_blank"
+         rel="noopener">
+        WhatsApp: 6351-3603
+      </a>
+
+      <span>PH Reserva del Norte, Pedregal</span>
+    </div>
+
+    <small>
+      © <span id="year"></span> Quick Bites.
+      Todos los derechos reservados.
+    </small>
+  </footer>
+
+  <script src="js/script.js"></script>
+
+</body>
+</html>
