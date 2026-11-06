@@ -34,7 +34,7 @@ const products = [
     category: "siumai",
     label: "Classic Siumai",
     description: "5 unidades de siumai de camarón. Al vapor o frito.",
-    price: "Desde $1.50",
+    price: "$1.50",
     image: "images/products/Camaron.png"
   },
   {
