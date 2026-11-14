@@ -11,7 +11,7 @@ const products = [
     label: "Classic siumai",
     description: "4 unidades de siumai de puerco al vapor.",
     price: "$1.60",
-    image: "images/products/TP.png"
+    image: "images/products/TP.jpeg"
   },
   {
     name: "Fuera de Quincena",
@@ -19,7 +19,7 @@ const products = [
     label: "Classic siumai",
     description: "4 unidades de siumai de puerco al vapor y 1 soda.",
     price: "$2.75",
-    image: "images/products/FQ.png"
+    image: "images/products/FQ.jpeg"
   },
   {
     name: "Rompe Dieta",
@@ -27,7 +27,7 @@ const products = [
     label: "siumai premium",
     description: "4 unidades de siumai de puerco frito.",
     price: "$2.00",
-    image: "images/products/RD.png"
+    image: "images/products/RD.jpeg"
   },
   {
     name: "Siumai de Camarón al vapor",
@@ -35,7 +35,7 @@ const products = [
     label: "Siumai premium",
     description: "5 unidades de siumai de camarón al vapor.",
     price: "$1.50",
-    image: "images/products/CV.png"
+    image: "images/products/CV.jpeg"
   },
   {
     name: "Siumai de Camarón frito",
@@ -43,7 +43,7 @@ const products = [
     label: "Siumai premium",
     description: "5 unidades de siumai de camarón frito.",
     price: "$1.50",
-    image: "images/products/CF.png"
+    image: "images/products/CF.jpeg"
   },
   {
     name: "Ha Kao",
@@ -51,7 +51,7 @@ const products = [
     label: "Classic Siumai",
     description: "4 dumplings al vapor con masa translúcida y relleno de camarón.",
     price: "$3.00",
-    image: "images/products/Hakao.png"
+    image: "images/products/Hakao.jpeg"
   },  
   {
     name: "Pecado Loco",
@@ -59,7 +59,7 @@ const products = [
     label: "Siumai premium",
     description: "4 unidades de siumai frito de puerco, coronados con queso crema y crujiente bacon. (Salsa de Anguila o Jalea de Aji Trompito)",
     price: "$3.25",
-    image: "images/products/Pecado.png"
+    image: "images/products/Pecado.jpeg"
   },
 
   {
