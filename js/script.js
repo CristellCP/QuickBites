@@ -11,7 +11,7 @@ const products = [
     label: "Classic siumai",
     description: "4 unidades de siumai de puerco al vapor.",
     price: "$1.60",
-    image: "images/products/FQ.png"
+    image: "images/products/TP.png"
   },
   {
     name: "Fuera de Quincena",
@@ -24,42 +24,42 @@ const products = [
   {
     name: "Rompe Dieta",
     category: "siumai",
-    label: "Classic siumai",
+    label: "siumai premium",
     description: "4 unidades de siumai de puerco frito.",
     price: "$2.00",
     image: "images/products/RD.png"
   },
   {
-    name: "Siumai de Camarón",
+    name: "Siumai de Camarón al vapor",
     category: "siumai",
-    label: "Classic Siumai",
-    description: "5 unidades de siumai de camarón. Al vapor o frito.",
+    label: "Siumai premium",
+    description: "5 unidades de siumai de camarón al vapor.",
     price: "$1.50",
-    image: "images/products/Camaron.png"
+    image: "images/products/CV.png"
+  },
+  {
+    name: "Siumai de Camarón frito",
+    category: "siumai",
+    label: "Siumai premium",
+    description: "5 unidades de siumai de camarón frito.",
+    price: "$1.50",
+    image: "images/products/CF.png"
   },
   {
     name: "Ha Kao",
-    category: "Dumpling",
-    label: "dumpling",
+    category: "siumai",
+    label: "Classic Siumai",
     description: "4 dumplings al vapor con masa translúcida y relleno de camarón.",
     price: "$3.00",
     image: "images/products/Hakao.png"
-  },
+  },  
   {
-    name: "Pecado Americano",
+    name: "Pecado Loco",
     category: "siumai",
     label: "Siumai premium",
-    description: "4 unidades de siumai frito de puerco, envuelto con bacon y bañado en salsa de anguila.",
+    description: "4 unidades de siumai frito de puerco, coronados con queso crema y crujiente bacon. (Salsa de Anguila o Jalea de Aji Trompito)",
     price: "$3.25",
     image: "images/products/Pecado.png"
-  },
-  {
-    name: "Trompito Loco",
-    category: "siumai",
-    label: "Siumai premium",
-    description: "4 unidades de siumai de puerco. Al vapor o frito, con queso crema y jalea de ají trompito.",
-    price: "$3.25",
-    image: "images/products/Trompito.png"
   },
 
   {
@@ -89,13 +89,15 @@ const products = [
 ];
 
 // SALSAS: presentación en lista, sin fotografías
-const sauces = [
+const classicSauces = [
   "Salsa china",
+  "Ketchup",
+  "Picante",
+];
+const premiumSauces = [
   "Chombasia",
   "Chispotle",
   "Siracha",
-  "Ketchup",
-  "Picante",
   "Jalea de ají trompito",
   "Salsa de anguila"
 ];
@@ -139,16 +141,9 @@ function renderProductCard(product) {
 // =========================================
 
 function renderSauces() {
-  return `
-    <section class="sauces-list-card">
-
-      <div class="sauces-list-heading">
-        <span class="product-category">Acompañamientos</span>
-
-        <h3>Nuestras <em>salsas</em></h3>
-
-        <p>El toque especial para acompañar tus favoritos.</p>
-      </div>
+  const renderSauceGroup = (title, sauces) => `
+    <div class="sauce-group">
+      <h4>${title}</h4>
 
       <ul class="sauces-list">
         ${sauces.map(sauce => `
@@ -160,15 +155,34 @@ function renderSauces() {
           </li>
         `).join("")}
       </ul>
+    </div>
+  `;
+
+  return `
+    <section class="sauces-list-card">
+
+      <div class="sauces-list-heading">
+        <span class="product-category">Acompañamientos</span>
+
+        <h3>Nuestras <em>salsas</em></h3>
+
+        <p>El toque especial para acompañar tus favoritos.</p>
+      </div>
+
+      <div class="sauce-groups">
+        ${renderSauceGroup("Clásicas", classicSauces)}
+        ${renderSauceGroup("Premium", premiumSauces)}
+      </div>
 
       <p class="sauces-list-note">
-        Máximo 2 salsas por combo.
+        Máximo 2 salsas por combo. 
+        Salsa clasica adicional $0.10
+        Salsa premium adicional $0.25
       </p>
 
     </section>
-  `;
-}
 
+ `;}
 // =========================================
 // MOSTRAR PRODUCTOS Y FILTROS
 // =========================================

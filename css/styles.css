@@ -1029,3 +1029,39 @@ img {
     transform: translateX(-50%);
   }
 }
+
+.sauce-groups {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  margin-top: 25px;
+}
+
+.sauce-group h4 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #851923;
+}
+
+.sauce-group:nth-child(2) h4 {
+  color: #b58a36;
+}
+
+.sauces-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sauces-list li {
+  margin-bottom: 10px;
+}
+
+@media (max-width: 600px) {
+  .sauce-groups {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
