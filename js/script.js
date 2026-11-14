@@ -176,7 +176,7 @@ function renderSauces() {
 
       <p class="sauces-list-note">
         Máximo 2 salsas por combo. 
-        Salsa clasica adicional $0.10
+        Salsa clasica adicional $0.10. 
         Salsa premium adicional $0.25
       </p>
 
