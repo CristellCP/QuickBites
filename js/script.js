@@ -156,7 +156,7 @@ function renderProducts() {
     if (!productsHTML && !saucesHTML) {
         productGrid.innerHTML = `
             <div class="empty-state">
-                No hay productos disponibles en esta categoría.
+                Productos no disponibles en este momento.
             </div>
         `;
         return;
