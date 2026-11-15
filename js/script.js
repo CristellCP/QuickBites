@@ -96,7 +96,7 @@ const classicSauces = [
 ];
 const premiumSauces = [
   "Chombasia",
-  "Chispotle",
+  "Chipotle",
   "Siracha",
   "Jalea de ají trompito",
   "Salsa de anguila"

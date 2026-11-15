@@ -1080,3 +1080,30 @@ img {
     gap: 20px;
   }
 }
+
+/* MURALLA CHINA COMO MARCA DE AGUA */
+
+body {
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+
+  background-image: url("images/muralla-china.png");
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: min(100%, 1200px);
+
+  opacity: 0.07;
+}
+
+/* Mantener el contenido por encima */
+body > * {
+  position: relative;
+  z-index: 1;
+}
