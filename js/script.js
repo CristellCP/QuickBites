@@ -1,258 +1,378 @@
 
-// =========================================
-// QUICK BITES - CATÁLOGO
-// =========================================
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-const products = [
-  
-  {
-    name: "Toy Pegao",
-    category: "siumai",
-    label: "Classic siumai",
-    description: "4 unidades de siumai de puerco al vapor.",
-    price: "$1.60",
-    image: "images/products/TP.jpeg"
-  },
-  {
-    name: "Fuera de Quincena",
-    category: "siumai",
-    label: "Classic siumai",
-    description: "4 unidades de siumai de puerco al vapor y 1 soda.",
-    price: "$2.75",
-    image: "images/products/FQ.jpeg"
-  },
-  {
-    name: "Rompe Dieta",
-    category: "siumai",
-    label: "siumai premium",
-    description: "4 unidades de siumai de puerco frito.",
-    price: "$2.00",
-    image: "images/products/RD.jpeg"
-  },
-  {
-    name: "Siumai de Camarón al vapor",
-    category: "siumai",
-    label: "Siumai premium",
-    description: "5 unidades de siumai de camarón al vapor.",
-    price: "$1.50",
-    image: "images/products/CV.jpeg"
-  },
-  {
-    name: "Siumai de Camarón frito",
-    category: "siumai",
-    label: "Siumai premium",
-    description: "5 unidades de siumai de camarón frito.",
-    price: "$1.50",
-    image: "images/products/CF.jpeg"
-  },
-  {
-    name: "Ha Kao",
-    category: "siumai",
-    label: "Classic Siumai",
-    description: "4 dumplings al vapor con masa translúcida y relleno de camarón.",
-    price: "$3.00",
-    image: "images/products/Hakao.jpeg"
-  },  
-  {
-    name: "Pecado Loco",
-    category: "siumai",
-    label: "Siumai premium",
-    description: "4 unidades de siumai frito de puerco, coronados con queso crema y crujiente bacon. (Salsa de Anguila o Jalea de Aji Trompito)",
-    price: "$3.25",
-    image: "images/products/Pecado.jpeg"
-  },
+// ==========================================
+// 1. CONEXIÓN CON SUPABASE
+// ==========================================
 
-  {
-    name: "Sodas",
-    category: "bebidas",
-    label: "Bebidas",
-    description: "Coca-Cola, Coca-Cola Zero, Ginger Ale, Fresca y Malta Vigor.",
-    price: "$1.00",
-    image: "images/products/Sodas.png"
-  },
-  {
-    name: "Agua Cielo",
-    category: "bebidas",
-    label: "Bebidas",
-    description: "Limón, maracuyá, toronja, manzana y fresa kiwi.",
-    price: "$1.00",
-    image: "images/products/Aguas.jpeg"
-  },
-  {
-    name: "Raptor",
-    category: "bebidas",
-    label: "Energizante",
-    description: "Bebida energizante.",
-    price: "$1.25",
-    image: "images/products/Raptor.jpeg"
-  }
-];
+// Copia estos dos valores desde tu archivo admin.js.
+// Utiliza únicamente la Publishable Key, nunca la Secret Key.
 
-// SALSAS: presentación en lista, sin fotografías
-const classicSauces = [
-  "Salsa china",
-  "Ketchup",
-  "Picante",
-];
-const premiumSauces = [
-  "Chombasia",
-  "Chipotle",
-  "Siracha",
-  "Jalea de ají trompito",
-  "Salsa de anguila"
-];
+const SUPABASE_URL = 'https://oqehsdtzonqaaeokvgjr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_3w814YEUj0CEyGO_m8ENPA_7YMoL4kI';
 
-const productGrid = document.querySelector("#productGrid");
-const filterBar = document.querySelector("#filterBar");
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// =========================================
-// TARJETAS DE PRODUCTOS
-// =========================================
+// ==========================================
+// 2. ELEMENTOS Y VARIABLES
+// ==========================================
 
-function renderProductCard(product) {
-  return `
-    <article class="product-card">
-      <div class="product-image">
-        <img
-          src="${product.image}"
-          alt="${product.name}"
-          loading="lazy"
-        >
-      </div>
+const productGrid = document.getElementById('productGrid');
+const filterBar = document.getElementById('filterBar');
 
-      <div class="product-info">
-        <span class="product-category">${product.label}</span>
+let products = [];
+let sauces = [];
+let activeFilter = 'todos';
 
-        <h3>${product.name}</h3>
+// ==========================================
+// 3. SEGURIDAD: ESCAPAR TEXTO HTML
+// ==========================================
 
-        <p>${product.description}</p>
-
-        <div class="product-bottom">
-          <span class="price">${product.price}</span>
-          <span class="price-note">QUICK BITES</span>
-        </div>
-      </div>
-    </article>
-  `;
+function escapeHTML(value) {
+    return String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    })[char]);
 }
 
-// =========================================
-// LISTA DE SALSAS
-// =========================================
+// ==========================================
+// 4. CARGAR PRODUCTOS DESDE SUPABASE
+// ==========================================
+
+async function loadProducts() {
+    const { data, error } = await supabase
+        .from('products')
+        .select(`
+            id,
+            name,
+            description,
+            price,
+            image_url,
+            is_available,
+            display_order,
+            categories (
+                name,
+                slug
+            )
+        `)
+        .eq('is_available', true)
+        .order('display_order', { ascending: true });
+
+    if (error) {
+        console.error('Error cargando productos:', error);
+        throw error;
+    }
+
+    products = data || [];
+}
+
+// ==========================================
+// 5. CARGAR SALSAS DESDE SUPABASE
+// ==========================================
+
+async function loadSauces() {
+    const { data, error } = await supabase
+        .from('sauces')
+        .select(`
+            id,
+            name,
+            sauce_type,
+            is_available,
+            display_order
+        `)
+        .eq('is_available', true)
+        .order('display_order', { ascending: true });
+
+    if (error) {
+        console.error('Error cargando salsas:', error);
+        throw error;
+    }
+
+    sauces = data || [];
+}
+
+// ==========================================
+// 6. MOSTRAR PRODUCTOS
+// ==========================================
+
+function renderProducts() {
+    if (!productGrid) return;
+
+    const filteredProducts = products.filter(product => {
+        if (activeFilter === 'todos' || activeFilter === 'salsas') {
+            return true;
+        }
+
+        return product.categories?.slug === activeFilter;
+    });
+
+    if (activeFilter === 'salsas') {
+        productGrid.innerHTML = '';
+        renderSauces();
+        return;
+    }
+
+    const productsHTML = filteredProducts.map(product => {
+        const name = escapeHTML(product.name);
+        const description = escapeHTML(product.description);
+        const category = escapeHTML(product.categories?.name || 'Quick Bites');
+        const image = product.image_url
+          ? `${SUPABASE_URL}/storage/v1/object/public/Product%20images/${encodeURIComponent(product.image_url)}`
+          : '';
+          console.log('Imagen:', product.name, image);
+        const price = Number(product.price).toFixed(2);
+
+        return `
+            <article class="product-card">
+                <div class="product-image">
+                    ${
+                        image
+                            ? `<img src="${image}" alt="${name}" loading="lazy">`
+                            : `<div class="empty-state">Imagen no disponible</div>`
+                    }
+                </div>
+
+                <div class="product-info">
+                    <span class="product-category">${category}</span>
+                    <h3>${name}</h3>
+                    <p>${description}</p>
+
+                    <div class="product-bottom">
+                        <span class="price">$${price}</span>
+                        <span class="price-note">QUICK BITES</span>
+                    </div>
+                </div>
+            </article>
+        `;
+    }).join('');
+
+    const saucesHTML = activeFilter === 'todos'
+        ? getSaucesHTML()
+        : '';
+
+    if (!productsHTML && !saucesHTML) {
+        productGrid.innerHTML = `
+            <div class="empty-state">
+                No hay productos disponibles en esta categoría.
+            </div>
+        `;
+        return;
+    }
+
+    productGrid.innerHTML = productsHTML + saucesHTML;
+}
+
+// ==========================================
+// 7. MOSTRAR LISTA DE SALSAS
+// ==========================================
+
+function getSaucesHTML() {
+    const classicSauces = sauces.filter(
+        sauce => sauce.sauce_type === 'clasica'
+    );
+
+    const premiumSauces = sauces.filter(
+        sauce => sauce.sauce_type === 'premium'
+    );
+
+    if (classicSauces.length === 0 && premiumSauces.length === 0) {
+        return '';
+    }
+
+    function createSauceItems(list) {
+        return list.map(sauce => `
+            <li>
+                <span class="sauce-dot"></span>
+                <span class="sauce-name">${escapeHTML(sauce.name)}</span>
+                <span class="sauce-availability">Disponible</span>
+            </li>
+        `).join('');
+    }
+
+    return `
+        <section class="sauces-list-card">
+            <div class="sauce-groups">
+
+                <div class="sauce-group">
+                    <h3>Salsas clásicas</h3>
+                    <ul class="sauces-list">
+                        ${createSauceItems(classicSauces)}
+                    </ul>
+                </div>
+
+                <div class="sauce-group">
+                    <h3>Salsas premium</h3>
+                    <ul class="sauces-list">
+                        ${createSauceItems(premiumSauces)}
+                    </ul>
+                </div>
+
+            </div>
+
+            <p class="sauces-list-note">
+                Máximo 2 salsas por combo. Extra: Salsa clasica: $0.10 | Salsa premium: $0.25
+            </p>
+        </section>
+    `;
+}
 
 function renderSauces() {
-  const renderSauceGroup = (title, sauces) => `
-    <div class="sauce-group">
-      <h4>${title}</h4>
+    if (!productGrid) return;
 
-      <ul class="sauces-list">
-        ${sauces.map(sauce => `
-          <li>
-            <span class="sauce-name">
-              <span class="sauce-dot"></span>
-              ${sauce}
-            </span>
-          </li>
-        `).join("")}
-      </ul>
-    </div>
-  `;
+    const html = getSaucesHTML();
 
-  return `
-    <section class="sauces-list-card">
-
-      <div class="sauces-list-heading">
-        <span class="product-category">Acompañamientos</span>
-
-        <h3>Nuestras <em>salsas</em></h3>
-
-        <p>El toque especial para acompañar tus favoritos.</p>
-      </div>
-
-      <div class="sauce-groups">
-        ${renderSauceGroup("Clásicas", classicSauces)}
-        ${renderSauceGroup("Premium", premiumSauces)}
-      </div>
-
-      <p class="sauces-list-note">
-        Máximo 2 salsas por combo. 
-        Salsa clasica adicional $0.10. 
-        Salsa premium adicional $0.25
-      </p>
-
-    </section>
-
- `;}
-// =========================================
-// MOSTRAR PRODUCTOS Y FILTROS
-// =========================================
-
-function renderProducts(filter = "todos") {
-  const visibleProducts = filter === "todos"
-    ? products
-    : products.filter(product => product.category === filter);
-
-  let content = visibleProducts
-    .map(renderProductCard)
-    .join("");
-
-  if (filter === "todos" || filter === "salsas") {
-    content += renderSauces();
-  }
-
-  productGrid.innerHTML = content ||
-    '<p class="empty-state">Pronto tendremos más opciones en esta categoría.</p>';
+    productGrid.innerHTML = html || `
+        <div class="empty-state">
+            No hay salsas disponibles actualmente.
+        </div>
+    `;
 }
 
-filterBar.addEventListener("click", event => {
-  const button = event.target.closest("button[data-filter]");
+// ==========================================
+// 8. FILTROS DEL MENÚ
+// ==========================================
 
-  if (!button) return;
+if (filterBar) {
+    filterBar.addEventListener('click', event => {
+        const button = event.target.closest('.filter-button');
 
-  filterBar.querySelectorAll(".filter-button")
-    .forEach(item => item.classList.remove("active"));
+        if (!button) return;
 
-  button.classList.add("active");
+        activeFilter = button.dataset.filter;
 
-  renderProducts(button.dataset.filter);
-});
+        filterBar.querySelectorAll('.filter-button').forEach(item => {
+            item.classList.remove('active');
+        });
 
-// =========================================
-// MENÚ PARA CELULARES
-// =========================================
+        button.classList.add('active');
 
-const menuToggle = document.querySelector("#menuToggle");
-const mainNav = document.querySelector("#mainNav");
+        renderProducts();
+    });
+}
 
-menuToggle.addEventListener("click", () => {
-  const isOpen = mainNav.classList.toggle("open");
+// ==========================================
+// 9. MENÚ DE NAVEGACIÓN PARA CELULARES
+// ==========================================
 
-  menuToggle.setAttribute("aria-expanded", String(isOpen));
-  menuToggle.setAttribute(
-    "aria-label",
-    isOpen ? "Cerrar menú" : "Abrir menú"
-  );
+const menuToggle = document.getElementById('menuToggle');
+const mainNav = document.getElementById('mainNav');
 
-  menuToggle.textContent = isOpen ? "✕" : "☰";
-});
+if (menuToggle && mainNav) {
+    menuToggle.addEventListener('click', () => {
+        const isOpen = mainNav.classList.toggle('open');
 
-mainNav.querySelectorAll("a").forEach(link => {
-  link.addEventListener("click", () => {
-    mainNav.classList.remove("open");
+        menuToggle.setAttribute('aria-expanded', isOpen);
+        menuToggle.textContent = isOpen ? '✕' : '☰';
+    });
 
-    menuToggle.setAttribute("aria-expanded", "false");
-    menuToggle.setAttribute("aria-label", "Abrir menú");
+    mainNav.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            mainNav.classList.remove('open');
+            menuToggle.setAttribute('aria-expanded', 'false');
+            menuToggle.textContent = '☰';
+        });
+    });
+}
 
-    menuToggle.textContent = "☰";
-  });
-});
+// ==========================================
+// 10. AÑO AUTOMÁTICO DEL FOOTER
+// ==========================================
 
-// =========================================
-// AÑO AUTOMÁTICO
-// =========================================
+const yearElement = document.getElementById('year');
 
-document.querySelector("#year").textContent =
-  new Date().getFullYear();
+if (yearElement) {
+    yearElement.textContent = new Date().getFullYear();
+}
 
-// Mostrar catálogo inicial
-renderProducts();
+// ==========================================
+// 11. INICIAR MENÚ
+// ==========================================
+
+async function initializeMenu() {
+    if (productGrid) {
+        productGrid.innerHTML = `
+            <div class="empty-state">
+                Cargando el menú de Quick Bites...
+            </div>
+        `;
+    }
+
+    try {
+        await Promise.all([
+            loadProducts(),
+            loadSauces()
+        ]);
+
+        renderProducts();
+        setupRealtimeSubscriptions();
+
+        console.log('Quick Bites conectado correctamente con Supabase.');
+    } catch (error) {
+        console.error('No se pudo cargar el menú:', error);
+
+        if (productGrid) {
+            productGrid.innerHTML = `
+                <div class="empty-state">
+                    No pudimos cargar el menú.
+                    Intenta actualizar la página.
+                </div>
+            `;
+        }
+    }
+}
+
+function setupRealtimeSubscriptions() {
+    const channel = supabase
+        .channel('quick-bites-live-menu')
+
+        // Escuchar cambios en productos
+        .on(
+            'postgres_changes',
+            {
+                event: '*',
+                schema: 'public',
+                table: 'products'
+            },
+            async (payload) => {
+                console.log('Cambio detectado en productos:', payload);
+
+                try {
+                    await loadProducts();
+                    renderProducts();
+                    console.log('Menú de productos actualizado.');
+                } catch (error) {
+                    console.error('Error actualizando productos:', error);
+                }
+            }
+        )
+
+        // Escuchar cambios en salsas
+        .on(
+            'postgres_changes',
+            {
+                event: '*',
+                schema: 'public',
+                table: 'sauces'
+            },
+            async (payload) => {
+                console.log('Cambio detectado en salsas:', payload);
+
+                try {
+                    await loadSauces();
+                    renderProducts();
+                    console.log('Menú de salsas actualizado.');
+                } catch (error) {
+                    console.error('Error actualizando salsas:', error);
+                }
+            }
+        )
+
+        .subscribe((status) => {
+            console.log('Estado de sincronización:', status);
+        });
+}
+
+initializeMenu();
